@@ -1,7 +1,6 @@
-## JTA Technical Assessment
+## Technical Assessment
 
   
-
 ### Introduction
 
 
