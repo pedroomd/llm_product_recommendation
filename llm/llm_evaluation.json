@@ -1,0 +1,48 @@
+[
+    {
+        "question": "I want a pepperoni pizza with extra cheese please.",
+        "answer": [""]
+    },
+    {
+        "question": "I want a Switch, some fries and a cola, please.",
+        "answer": [""]
+    },
+    {
+        "question": "I want to buy a game for my nephew, at Store A, who is 5 years old. We loved super maro odyssey, but I cannot buy a game from this family as he already has all Super Mario games.",
+        "answer": ["Animal Crossing: New Horizons"]
+    },
+    {
+        "question": "I’m buying a Switch for my 10 years old son. Suggest an age-appropriate game.",
+        "answer": ["Animal Crossing: New Horizons"]
+    },
+    {
+        "question": "I got a Nintendo Switch. What game should I play first?",
+        "answer": ["Animal Crossing: New Horizons"]
+    },
+    {
+        "question": "I’m buying a Switch and want the top 3 games usually bought with it.",
+        "answer": ["Animal Crossing: New Horizons", "Super Mario Odyssey", "Zelda: Tears of the Kingdom"]
+    },
+    {
+        "question": "I’m buying a Switch for my 7-year-old friend at Store C. She already has Mario kat 8 deluxe and doesn’t like Party games.",
+        "answer": ["Super Mario Odyssey"]
+    },
+    {
+        "question": "What game should I get first from zelda games?",
+        "answer": ["Zelda: Tears of the Kingdom"]
+    },
+    {
+        "question": "I’m looking to buy a game for my eleven years old niece from Store C. She already owns Zelda BOTW and Tears of the kingdom.",
+        "answer": ["Animal Crossing: New Horizons"]
+    },
+    {
+        "question": "What’s a good combination of items frequently bought together with the Switch that includes one game and one accessory?",
+        "answer": ["Animal Crossing: New Horizons", "Nintendo Switch Pro Controller"]
+    },
+    {
+        "question": "Which games are available in Store B that aren't available in Store C?",
+        "answer": ["Sonic Mania", "Animal Crossing: New Horizon"]
+    }
+
+]
+  

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="UTF-8">
+        <title>LLM Results Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .header { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+            .section { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ccc; }
+            .question { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+            .original-query { background-color: #ffc8c8; padding: 5px; }
+            .corrected-query { background-color: #c8ffc8; padding: 5px; margin-top: 5px; }
+            .response { padding: 5px; margin-top: 5px; }
+        </style>
+        </head>
+        <body>
+        <div class="header">LLM Results Report</div>
+        
+            <div class="section">
+                <div class="question">Question: I want a pepperoni pizza with extra cheese please.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (n) WHERE false RETURN n
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (n) WHERE false RETURN n
+</div>
+                <div class="response">Expected Response: ['']</div>
+                <div class="response">Actual Response: ✅ I don't know the answer.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I want a Switch, some fries and a cola, please.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (n)
+WHERE false
+RETURN n
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (n)
+WHERE false
+RETURN n
+</div>
+                <div class="response">Expected Response: ['']</div>
+                <div class="response">Actual Response: ✅ I don't know the answer.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I want to buy a game for my nephew, at Store A, who is 5 years old. We loved super maro odyssey, but I cannot buy a game from this family as he already has all Super Mario games.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (g:Game)-[:SOLD_AT]->(s:Store {name: 'Store A'})
+WHERE g.min_age <= 5 AND g.franchise <> 'Super Mario'
+RETURN g.name, g.times_sold, g.category, g.franchise
+ORDER BY g.times_sold DESC
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (g:Game)-[:SOLD_AT]->(s:Store {name: 'Store A'})
+WHERE g.min_age <= 5 AND g.franchise <> 'Super Mario'
+RETURN g.name, g.times_sold, g.category, g.franchise
+ORDER BY g.times_sold DESC
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons']</div>
+                <div class="response">Actual Response: ✅ You might consider "Animal Crossing: New Horizons," which is a simulation game from the Animal Crossing franchise.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I’m buying a Switch for my 10 years old son. Suggest an age-appropriate game.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (g:Game)
+WHERE g.min_age <= 10
+RETURN g.name, g.category, g.franchise
+ORDER BY g.times_sold DESC
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (g:Game)
+WHERE g.min_age <= 10
+RETURN g.name, g.category, g.franchise
+ORDER BY g.times_sold DESC
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons']</div>
+                <div class="response">Actual Response: ✅ Animal Crossing: New Horizons is a suitable game for a 10-year-old, as it falls under the Simulation category and is part of the Animal Crossing franchise.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I got a Nintendo Switch. What game should I play first?</div>
+                <div class="original-query">Original Query: cypher
+MATCH (c:Console {name: 'Nintendo Switch'})-[:SOLD_TOGETHER]-(g:Game)
+RETURN g.name, g.times_sold
+ORDER BY g.times_sold DESC
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (c:Console {name: 'Nintendo Switch'})-[:SOLD_TOGETHER]-(g:Game)
+RETURN g.name, g.times_sold
+ORDER BY g.times_sold DESC
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons']</div>
+                <div class="response">Actual Response: ✅ Animal Crossing: New Horizons, with 800,000 copies sold, is a popular choice for Nintendo Switch players.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I’m buying a Switch and want the top 3 games usually bought with it.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (c:Console {name: 'Switch'})-[r:SOLD_TOGETHER]-(g:Game)
+RETURN g.name, r.together_sold
+ORDER BY r.together_sold DESC
+LIMIT 3
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (c:Console {name: 'Nintendo Switch'})-[r:SOLD_TOGETHER]-(g:Game)
+RETURN g.name, r.together_sold
+ORDER BY r.together_sold DESC
+LIMIT 3
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons', 'Super Mario Odyssey', 'Zelda: Tears of the Kingdom']</div>
+                <div class="response">Actual Response: ✅ Animal Crossing: New Horizons, Super Mario Odyssey, and Zelda: Tears of the Kingdom are the top 3 games usually bought with a Switch.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I’m buying a Switch for my 7-year-old friend at Store C. She already has Mario kat 8 deluxe and doesn’t like Party games.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (console:Console {name: 'Switch'})-[:SOLD_AT]->(store:Store {name: 'Store C'})
+MATCH (console)-[:SOLD_TOGETHER]-(product)
+WHERE ('Game' IN labels(product) OR 'Accessory' IN labels(product) OR 'Product' IN labels(product))
+  AND product.min_age <= 7
+  AND product.name <> 'Mario kart 8 deluxe'
+  AND product.category <> 'Party'
+RETURN product
+ORDER BY product.times_sold DESC
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (console:Console {name: 'Nintendo Switch'})-[:SOLD_AT]->(store:Store {name: 'Store C'})
+MATCH (console)-[:SOLD_TOGETHER]-(product)
+WHERE ('Game' IN labels(product) OR 'Accessory' IN labels(product) OR 'Product' IN labels(product))
+  AND product.min_age <= 7
+  AND product.name <> 'Mario Kart 8 Deluxe'
+  AND product.category <> 'Party'
+RETURN product
+ORDER BY product.times_sold DESC
+</div>
+                <div class="response">Expected Response: ['Super Mario Odyssey']</div>
+                <div class="response">Actual Response: ✅ You might consider buying "Animal Crossing: New Horizons," "Super Mario Odyssey," or "Pikmin 4" for your 7-year-old friend. These games are suitable for her age and are not party games.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: What game should I get first from zelda games?</div>
+                <div class="original-query">Original Query: cypher
+MATCH (g:Game {franchise: 'Zelda'})
+RETURN g.name
+ORDER BY g.times_sold DESC
+LIMIT 1
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (g:Game {franchise: 'The Legend of Zelda'})
+RETURN g.name
+ORDER BY g.times_sold DESC
+LIMIT 1
+</div>
+                <div class="response">Expected Response: ['Zelda: Tears of the Kingdom']</div>
+                <div class="response">Actual Response: ✅ Zelda: Tears of the Kingdom is a game you should consider getting first from the Zelda series.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: I’m looking to buy a game for my eleven years old niece from Store C. She already owns Zelda BOTW and Tears of the kingdom.</div>
+                <div class="original-query">Original Query: cypher
+MATCH (store:Store {name: 'Store C'})<-[:SOLD_AT]-(game:Game)
+WHERE game.min_age <= 11 AND game.name <> 'Zelda BOTW' AND game.name <> 'Tears of the kingdom'
+RETURN game.name, game.category, game.times_sold
+ORDER BY game.times_sold DESC
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (store:Store {name: 'Store C'})<-[:SOLD_AT]-(game:Game)
+WHERE game.min_age <= 11 AND game.name <> 'Zelda: Breath of the Wild' AND game.name <> 'Zelda: Tears of the Kingdom'
+RETURN game.name, game.category, game.times_sold
+ORDER BY game.times_sold DESC
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons']</div>
+                <div class="response">Actual Response: ❌ You might consider buying Splatoon 3, Super Mario Odyssey, or Mario Kart 8 Deluxe for your eleven-year-old niece. These games are popular and have sold well, with Splatoon 3 being a shooter, Super Mario Odyssey a platformer, and Mario Kart 8 Deluxe a racing game.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: What’s a good combination of items frequently bought together with the Switch that includes one game and one accessory?</div>
+                <div class="original-query">Original Query: cypher
+MATCH (c:Console {name: 'Switch'})-[r1:SOLD_TOGETHER]-(g:Game), 
+      (c)-[r2:SOLD_TOGETHER]-(a:Accessory)
+RETURN g.name AS Game, a.name AS Accessory, r1.together_sold + r2.together_sold AS TotalSoldTogether
+ORDER BY TotalSoldTogether DESC
+LIMIT 1
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (c:Console {name: 'Nintendo Switch'})-[r1:SOLD_TOGETHER]-(g:Game), 
+      (c)-[r2:SOLD_TOGETHER]-(a:Accessory)
+RETURN g.name AS Game, a.name AS Accessory, r1.together_sold + r2.together_sold AS TotalSoldTogether
+ORDER BY TotalSoldTogether DESC
+LIMIT 1
+</div>
+                <div class="response">Expected Response: ['Animal Crossing: New Horizons', 'Nintendo Switch Pro Controller']</div>
+                <div class="response">Actual Response: ✅ A good combination of items frequently bought together with the Switch is Animal Crossing: New Horizons and the Nintendo Switch Pro Controller, with 150,000 units sold together.</div>
+            </div>
+            
+            <div class="section">
+                <div class="question">Question: Which games are available in Store B that aren't available in Store C?</div>
+                <div class="original-query">Original Query: cypher
+MATCH (g:Game)-[:SOLD_AT]->(s:Store {name: 'Store B'})
+WHERE NOT EXISTS {
+  MATCH (g)-[:SOLD_AT]->(s2:Store {name: 'Store C'})
+}
+RETURN g.name
+</div>
+                <div class="corrected-query">Corrected Query: cypher
+MATCH (g:Game)-[:SOLD_AT]->(s:Store {name: 'Store B'})
+WHERE NOT EXISTS {
+  MATCH (g)-[:SOLD_AT]->(s2:Store {name: 'Store C'})
+}
+RETURN g.name
+</div>
+                <div class="response">Expected Response: ['Sonic Mania', 'Animal Crossing: New Horizon']</div>
+                <div class="response">Actual Response: ✅ Animal Crossing: New Horizons, Sonic Mania are available in Store B but not in Store C.</div>
+            </div>
+            </body></html>
